@@ -5,6 +5,7 @@ Usage: smart_search.py "query" [--domain "Domain"] [--min-kb-score 0.5] [--store
 """
 
 import argparse
+import os
 import sys
 import json
 import urllib.request
@@ -16,6 +17,9 @@ QDRANT_URL = "http://10.0.0.40:6333"
 OLLAMA_EMBED_URL = "http://localhost:11434/api/embed"
 SEARXNG_URL = "http://10.0.0.8:8888"
 KB_COLLECTION = "knowledge_base"
+
+TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "")
+SEARCH_PROVIDER = os.environ.get("SEARCH_PROVIDER", "searxng")
 
 def get_embedding(text):
     """Generate embedding via Ollama"""
@@ -75,16 +79,68 @@ def search_knowledge_base(query, domain=None, limit=5, min_score=0.5):
         print(f"⚠️  KB search error: {e}", file=sys.stderr)
         return []
 
-def web_search(query, limit=5):
+def _searxng_search(query, limit=5):
     """Search via SearXNG"""
     encoded_query = urllib.parse.quote(query)
     url = f"{SEARXNG_URL}/?q={encoded_query}&format=json&safesearch=0"
-    
+
+    req = urllib.request.Request(url, headers={"Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=15) as response:
+        data = json.loads(response.read().decode())
+        return data.get("results", [])[:limit]
+
+
+def _tavily_search(query, limit=5):
+    """Search via Tavily"""
+    from tavily import TavilyClient
+
+    client = TavilyClient(api_key=TAVILY_API_KEY)
+    response = client.search(query=query, max_results=limit)
+    # Normalize to same schema: url, title, content
+    results = []
+    for r in response.get("results", []):
+        results.append({
+            "url": r.get("url", ""),
+            "title": r.get("title", ""),
+            "content": r.get("content", ""),
+        })
+    return results
+
+
+def web_search(query, limit=5, provider=None):
+    """Search the web using the configured provider (searxng, tavily, or auto)"""
+    provider = provider or SEARCH_PROVIDER
+
+    if provider == "tavily":
+        if not TAVILY_API_KEY:
+            print("⚠️  TAVILY_API_KEY not set, falling back to SearXNG", file=sys.stderr)
+            provider = "searxng"
+        else:
+            try:
+                return _tavily_search(query, limit)
+            except Exception as e:
+                print(f"⚠️  Tavily search error: {e}", file=sys.stderr)
+                return []
+
+    if provider == "auto":
+        # Try SearXNG first, fall back to Tavily if it fails
+        try:
+            return _searxng_search(query, limit)
+        except Exception as e:
+            print(f"⚠️  SearXNG unavailable ({e}), trying Tavily...", file=sys.stderr)
+            if TAVILY_API_KEY:
+                try:
+                    return _tavily_search(query, limit)
+                except Exception as e2:
+                    print(f"⚠️  Tavily also failed: {e2}", file=sys.stderr)
+                    return []
+            else:
+                print("⚠️  TAVILY_API_KEY not set, no fallback available", file=sys.stderr)
+                return []
+
+    # Default: searxng
     try:
-        req = urllib.request.Request(url, headers={"Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=15) as response:
-            data = json.loads(response.read().decode())
-            return data.get("results", [])[:limit]
+        return _searxng_search(query, limit)
     except Exception as e:
         print(f"⚠️  Web search error: {e}", file=sys.stderr)
         return []
@@ -211,7 +267,9 @@ def main():
     parser.add_argument("--store-new", action="store_true", help="Automatically store new web findings")
     parser.add_argument("--web-limit", type=int, default=3, help="Number of web results to check")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
-    
+    parser.add_argument("--search-provider", choices=["searxng", "tavily", "auto"],
+                        default=None, help="Search provider (default: env SEARCH_PROVIDER or searxng)")
+
     args = parser.parse_args()
     
     results = {
@@ -240,7 +298,7 @@ def main():
     
     # Step 2: Web search
     print(f"\n🌐 Searching web...")
-    web_results = web_search(args.query, limit=args.web_limit)
+    web_results = web_search(args.query, limit=args.web_limit, provider=args.search_provider)
     results["web_results"] = web_results
     
     if not web_results:
